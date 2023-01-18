@@ -1,24 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Input from "./components/Input";
+// import Todo from "./components/Todo";
+import TodoList from "./components/TodoList";
+import { v4 as uuidv4 } from "uuid";
+
+export type DataType = {
+  id: string;
+  title: string;
+  content: string;
+  isDone: boolean;
+};
 
 function App() {
+  const initialState = [
+    {
+      id: uuidv4(),
+      title: "타입스크립트",
+      content: "영진님, 감사합니다",
+      isDone: false,
+    },
+    {
+      id: uuidv4(),
+      title: "자바스크립트",
+      content: "쉽지 않군요",
+      isDone: true,
+    },
+  ];
+
+  // console.log("initialState: ", initialState);
+
+  const [todos, setTodos] = useState<DataType[]>(initialState as DataType[]);
+
+  // console.log("todos: ", todos);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Input todos={todos} setTodos={setTodos} />
+      <TodoList isActive={true} todos={todos} setTodos={setTodos} />
+      <TodoList isActive={false} todos={todos} setTodos={setTodos} />
     </div>
   );
 }
