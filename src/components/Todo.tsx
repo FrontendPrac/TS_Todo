@@ -1,28 +1,21 @@
 import React from "react";
 import { DataType } from "../App";
+import { useDispatch } from "react-redux";
+import { deleteTodo, switchTodo } from "../redux/modules/todos";
 
 type Props = {
-  // isActive: boolean;
   todos: DataType[];
-  setTodos: React.Dispatch<React.SetStateAction<DataType[]>>;
   todo: DataType;
 };
 
-const Todo = ({ todos, setTodos, todo }: Props) => {
+const Todo = ({ todos, todo }: Props) => {
+  const dispatch = useDispatch();
   const onClickSwithHandler = () => {
-    setTodos((todos) =>
-      todos.map((t) => {
-        if (t.id === todo.id) {
-          return { ...t, isDone: !t.isDone };
-        } else {
-          return t;
-        }
-      })
-    );
+    dispatch(switchTodo(todo.id));
   };
 
   const onClickDeleteHandler = () => {
-    setTodos((todos) => todos.filter((t) => t.id !== todo.id));
+    dispatch(deleteTodo(todo.id));
   };
 
   return (

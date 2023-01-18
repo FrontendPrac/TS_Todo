@@ -1,8 +1,8 @@
-import React, { useState } from "react";
 import Input from "./components/Input";
-// import Todo from "./components/Todo";
 import TodoList from "./components/TodoList";
-import { v4 as uuidv4 } from "uuid";
+
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/config/configStore";
 
 export type DataType = {
   id: string;
@@ -12,32 +12,15 @@ export type DataType = {
 };
 
 function App() {
-  const initialState = [
-    {
-      id: uuidv4(),
-      title: "타입스크립트",
-      content: "영진님, 감사합니다",
-      isDone: false,
-    },
-    {
-      id: uuidv4(),
-      title: "자바스크립트",
-      content: "쉽지 않군요",
-      isDone: true,
-    },
-  ];
-
-  // console.log("initialState: ", initialState);
-
-  const [todos, setTodos] = useState<DataType[]>(initialState as DataType[]);
+  const todos = useSelector((state: RootState) => state.todos.todos);
 
   // console.log("todos: ", todos);
 
   return (
     <div className="App">
-      <Input todos={todos} setTodos={setTodos} />
-      <TodoList isActive={true} todos={todos} setTodos={setTodos} />
-      <TodoList isActive={false} todos={todos} setTodos={setTodos} />
+      <Input todos={todos} />
+      <TodoList isActive={true} todos={todos} />
+      <TodoList isActive={false} todos={todos} />
     </div>
   );
 }

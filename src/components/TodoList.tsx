@@ -5,24 +5,16 @@ import Todo from "./Todo";
 type Props = {
   isActive: boolean;
   todos: DataType[];
-  setTodos: React.Dispatch<React.SetStateAction<DataType[]>>;
 };
 
-const TodoList = ({ isActive, todos, setTodos }: Props) => {
+const TodoList = ({ isActive, todos }: Props) => {
   return (
     <>
       <h4>{isActive === true ? "해야할 것" : "완료된 것"}</h4>
       {todos
         .filter((todo) => todo.isDone !== isActive)
         .map((todo) => {
-          return (
-            <Todo
-              todos={todos}
-              setTodos={setTodos}
-              key={todo.id}
-              todo={todo}
-            />
-          );
+          return <Todo todos={todos} key={todo.id} todo={todo} />;
         })}
     </>
   );

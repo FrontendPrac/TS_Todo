@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { DataType } from "../App";
 
+import { addTodo } from "../redux/modules/todos";
+import { useDispatch } from "react-redux";
+
 type Props = {
   todos: DataType[];
-  setTodos: React.Dispatch<React.SetStateAction<DataType[]>>;
 };
 
-const Input = ({ todos, setTodos }: Props) => {
+const Input = ({ todos }: Props) => {
   // console.log("todos: ", todos);
+
+  const dispatch = useDispatch();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -34,9 +38,7 @@ const Input = ({ todos, setTodos }: Props) => {
         isDone: false,
       };
 
-      setTodos((todos) => {
-        return [...todos, newTodo];
-      });
+      dispatch(addTodo(newTodo));
 
       setTitle("");
       setContent("");
