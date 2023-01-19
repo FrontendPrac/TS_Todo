@@ -1,7 +1,8 @@
 import React from "react";
 import { DataType } from "../App";
 import { useDispatch } from "react-redux";
-import { deleteTodo, switchTodo } from "../redux/modules/todos";
+import { deleteTodo, switchTodo } from "../redux/modules/todosSlice";
+import { AppDispatch } from "../redux/config/configStoreSlice";
 
 type Props = {
   todos: DataType[];
@@ -9,7 +10,7 @@ type Props = {
 };
 
 const Todo = ({ todos, todo }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const onClickSwithHandler = () => {
     dispatch(switchTodo(todo.id));
   };

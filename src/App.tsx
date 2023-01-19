@@ -2,7 +2,7 @@ import Input from "./components/Input";
 import TodoList from "./components/TodoList";
 
 import { useSelector } from "react-redux";
-import { RootState } from "./redux/config/configStore";
+import { RootState } from "./redux/config/configStoreSlice";
 
 export type DataType = {
   id: string;

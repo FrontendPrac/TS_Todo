@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { DataType } from "../App";
 
-import { addTodo } from "../redux/modules/todos";
+import { addTodo } from "../redux/modules/todosSlice";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/config/configStoreSlice";
 
 type Props = {
   todos: DataType[];
@@ -12,7 +13,7 @@ type Props = {
 const Input = ({ todos }: Props) => {
   // console.log("todos: ", todos);
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
