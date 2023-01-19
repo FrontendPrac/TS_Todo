@@ -2,11 +2,12 @@ import React, { useState } from "react";
 // import { v4 as uuidv4 } from "uuid";
 import { DataType } from "../App";
 
-import { addTodo } from "../redux/modules/todosSlice";
+// import { addTodo } from "../redux/modules/todosSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/config/configStoreSlice";
-import { addDoc, collection } from "firebase/firestore";
-import { dbService } from "../firebase/firebase";
+// import { addDoc, collection } from "firebase/firestore";
+// import { dbService } from "../firebase/firebase";
+import { __addTodo } from "../redux/modules/todosThunk";
 
 type Props = {
   todos: DataType[];
@@ -42,8 +43,9 @@ const Input = ({ todos }: Props) => {
         createdAt: Date.now(),
       };
 
-      dispatch(addTodo(newTodo));
-      addDoc(collection(dbService, "todos"), newTodo);
+      // dispatch(addTodo(newTodo));
+      // addDoc(collection(dbService, "todos"), newTodo);
+      dispatch(__addTodo(newTodo))
 
       setTitle("");
       setContent("");

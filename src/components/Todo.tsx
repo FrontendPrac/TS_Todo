@@ -3,8 +3,9 @@ import { DataType } from "../App";
 import { useDispatch } from "react-redux";
 import { deleteTodo, switchTodo } from "../redux/modules/todosSlice";
 import { AppDispatch } from "../redux/config/configStoreSlice";
-import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { dbService } from "../firebase/firebase";
+import { __deleteTodo, __switchTodo } from "../redux/modules/todosThunk";
 
 type Props = {
   todos: DataType[];
@@ -15,15 +16,17 @@ const Todo = ({ todos, todo }: Props) => {
   const dispatch: AppDispatch = useDispatch();
 
   const onClickSwithHandler = async () => {
-    dispatch(switchTodo(todo.id));
-    await updateDoc(doc(dbService, "todos", todo.id), {
-      isDone: !todo.isDone,
-    });
+    // dispatch(switchTodo(todo.id));
+    // await updateDoc(doc(dbService, "todos", todo.id), {
+    //   isDone: !todo.isDone,
+    // });
+    dispatch(__switchTodo({ id: todo.id, isDone: !todo.isDone }));
   };
 
   const onClickDeleteHandler = async () => {
-    dispatch(deleteTodo(todo.id));
-    await deleteDoc(doc(dbService, "todos", todo.id));
+    // dispatch(deleteTodo(todo.id));
+    // await deleteDoc(doc(dbService, "todos", todo.id));
+    dispatch(__deleteTodo(todo.id));
   };
 
   return (

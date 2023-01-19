@@ -1,50 +1,70 @@
 import Input from "./components/Input";
 import TodoList from "./components/TodoList";
 
-// import { useSelector } from "react-redux";
-// import { RootState } from "./redux/config/configStoreSlice";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { dbService } from "./firebase/firebase";
 import { useEffect, useState } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "./redux/config/configStoreSlice";
+import { __getTodos } from "./redux/modules/todosThunk";
+import { createNoSubstitutionTemplateLiteral } from "typescript";
 
 export type DataType = {
   id: string;
   title: string;
   content: string;
   isDone: boolean;
+  createdAt: number;
 };
 
 function App() {
-  // const todos = useSelector((state: RootState) => state.todos.todos);
-  // console.log("todos: ", todos);
+  // const [todos, setTodos] = useState([]);
 
-  const [todos, setTodos] = useState([]);
+  // const getTodos = () => {
+  //   const q = query(
+  //     collection(dbService, "todos"),
+  //     orderBy("createdAt", "desc")
+  //   );
 
-  const getTodos = () => {
-    const q = query(
-      collection(dbService, "todos"),
-      orderBy("createdAt", "desc") // collection 내의 도큐먼트들을 createdAt 속성을 내림차순으로 쿼리한다
-    );
+  //   onSnapshot(q, (snapshot) => {
+  //     const newArr: any = [];
+  //     snapshot.docs.map((doc) => {
+  //       const newObj = {
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       };
+  //       newArr.push(newObj);
+  //       setTodos(newArr);
+  //       // console.log("newArr: ", newArr);
+  //       // console.log("newObj: ", newObj);
+  //     });
+  //   });
+  // };
 
-    onSnapshot(q, (snapshot) => {
-      // 쿼리안에 담긴 collection 내의 변화가 생길 때 마다 콜백함수를 매번 실행한다
-      const newArr: any = [];
-      snapshot.docs.map((doc) => {
-        const newObj = {
-          id: doc.id,
-          ...doc.data(), // doc.data() : { text, createdAt, ...  }
-        };
-        newArr.push(newObj);
-        setTodos(newArr);
-        // console.log("newArr: ", newArr);
-        // console.log("newObj: ", newObj);
-      });
-    });
-  };
+  // useEffect(() => {
+  //   getTodos();
+  // }, []);
+
+  const state = useSelector((state: RootState) => state.todos);
+  // console.log("state: ", state);
+
+  const { isLoading, error, todos } = useSelector((state: any) => state.todos);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getTodos();
-  }, []);
+    dispatch(__getTodos());
+    // console.log("todos: ", todos);
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <div>로딩 중 ...</div>;
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <div className="App">
