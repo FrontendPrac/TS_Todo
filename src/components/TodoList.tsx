@@ -13,8 +13,8 @@ const TodoList = ({ isActive, todos }: Props) => {
       <h4>{isActive === true ? "해야할 것" : "완료된 것"}</h4>
       {todos
         ?.filter((todo) => todo.isDone !== isActive)
-        .map((todo) => {
-          return <Todo todos={todos} key={todo.id} todo={todo} />;
+        ?.map((todo) => {
+          return <Todo key={todo.createdAt} todos={todos} todo={todo} />;
         })}
     </>
   );

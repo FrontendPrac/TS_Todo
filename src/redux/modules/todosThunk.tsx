@@ -5,6 +5,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -25,7 +26,7 @@ export const __addTodo: any = createAsyncThunk(
   async (payload: any, thunkAPI) => {
     try {
       console.log("payload: ", payload);
-      addDoc(collection(dbService, "todos"), payload);
+      await addDoc(collection(dbService, "todos"), payload);
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -38,7 +39,7 @@ export const __deleteTodo: any = createAsyncThunk(
   async (payload: string, thunkAPI) => {
     try {
       console.log("payload: ", payload);
-      deleteDoc(doc(dbService, "todos", payload));
+      await deleteDoc(doc(dbService, "todos", payload));
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -65,25 +66,23 @@ export const __getTodos: any = createAsyncThunk(
   "getTodos",
   async (payload, thunkAPI) => {
     try {
+      // onSnapShot은 비동기 함수이기 때문에 나중에 실행된다
+      // 고로 getDocs를 사용했다
       const q = query(
-        collection(dbService, "todos"),
-        orderBy("createdAt", "desc")
+        collection(dbService, 'todos'),
+        orderBy('createdAt', 'desc')
       );
-
-      onSnapshot(q, (snapshot) => {
-        const newArr: any = [];
-        snapshot.docs.map((doc) => {
-          const newObj = {
-            id: doc.id,
-            ...doc.data(),
-          };
-          newArr.push(newObj);
-          // console.log("newArr: ", newArr);
-          // console.log("newObj: ", newObj);
-        });
-        // console.log("newArr: ", newArr);
-        return thunkAPI.fulfillWithValue(newArr);
+      const newArr: any = [];
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const newObj = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        newArr.push(newObj);
       });
+
+      return thunkAPI.fulfillWithValue(newArr);
     } catch (error) {
       // console.log(error);
       return thunkAPI.rejectWithValue(error);
@@ -92,7 +91,7 @@ export const __getTodos: any = createAsyncThunk(
 );
 
 // crateSlice, extraReducer
-const todosSlice = createSlice({
+const todosThunk = createSlice({
   name: "todos",
   initialState: initialState,
   reducers: {},
@@ -152,18 +151,17 @@ const todosSlice = createSlice({
     // __getTodos
     [__getTodos.pending]: (state) => {
       // console.log("state.isLoading: ", state.isLoading);
-      // console.log("state.todos: ", state.todos);
+      console.log("state.todos: ", state.todos);
       state.isLoading = true;
     },
     [__getTodos.fulfilled]: (state, action) => {
-      console.log("state.isLoading: ", state.isLoading);
-      console.log("state.todos: ", state.todos);
-      console.log("action.payload: ", action.payload);
+      // console.log("state.isLoading: ", state.isLoading);
+      // console.log("state.todos: ", state.todos);
+      // console.log("action.payload: ", action.payload);
       state.isLoading = false;
       state.todos = action.payload;
     },
     [__getTodos.rejected]: (state, action) => {
-      // 에러가 나는 상황에 실행되는 코드
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -172,5 +170,5 @@ const todosSlice = createSlice({
 
 // export action creator, reducer
 export const { addTodo, deleteTodo, switchTodo, getTodos }: any =
-  todosSlice.actions;
-export default todosSlice.reducer;
+  todosThunk.actions;
+export default todosThunk.reducer;

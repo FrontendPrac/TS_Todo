@@ -46,7 +46,7 @@ function App() {
   //   getTodos();
   // }, []);
 
-  const state = useSelector((state: RootState) => state.todos);
+  // const state = useSelector((state: RootState) => state.todos);
   // console.log("state: ", state);
 
   const { isLoading, error, todos } = useSelector((state: any) => state.todos);
@@ -55,8 +55,11 @@ function App() {
 
   useEffect(() => {
     dispatch(__getTodos());
-    // console.log("todos: ", todos);
   }, [dispatch]);
+
+  useEffect(() => {
+    console.log(todos);
+  }, [todos]);
 
   if (isLoading) {
     return <div>로딩 중 ...</div>;
