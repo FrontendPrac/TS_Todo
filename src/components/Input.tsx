@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 import { DataType } from "../App";
 
 import { addTodo } from "../redux/modules/todosSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/config/configStoreSlice";
+import { addDoc, collection } from "firebase/firestore";
+import { dbService } from "../firebase/firebase";
 
 type Props = {
   todos: DataType[];
@@ -33,13 +35,15 @@ const Input = ({ todos }: Props) => {
       alert("빈 칸을 채워주세요");
     } else {
       const newTodo = {
-        id: uuidv4(),
+        // id: uuidv4(),
         title: title,
         content: content,
         isDone: false,
+        createdAt: Date.now(),
       };
 
       dispatch(addTodo(newTodo));
+      addDoc(collection(dbService, "todos"), newTodo);
 
       setTitle("");
       setContent("");

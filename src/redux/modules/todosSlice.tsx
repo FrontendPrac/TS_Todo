@@ -1,21 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 // initial state
 const initialState: any = {
   todos: [
-    {
-      id: uuidv4(),
-      title: "타입스크립트",
-      content: "영진님, 감사합니다",
-      isDone: false,
-    },
-    {
-      id: uuidv4(),
-      title: "자바스크립트",
-      content: "쉽지 않군요",
-      isDone: true,
-    },
+    // {
+    //   id: uuidv4(),
+    //   title: "타입스크립트",
+    //   content: "영진님, 감사합니다",
+    //   isDone: false,
+    // },
+    // {
+    //   id: uuidv4(),
+    //   title: "자바스크립트",
+    //   content: "쉽지 않군요",
+    //   isDone: true,
+    // },
   ],
 };
 
@@ -42,7 +42,9 @@ const todosSlice = createSlice({
     deleteTodo: (state, action) => {
       return {
         ...state,
-        todos: state.todos.filter((todo: TodoType) => todo.id !== action.payload),
+        todos: state.todos.filter(
+          (todo: TodoType) => todo.id !== action.payload
+        ),
       };
     },
 
